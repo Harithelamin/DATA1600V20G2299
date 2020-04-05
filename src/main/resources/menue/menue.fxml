@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="248.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="menue.Controller">
+    <stylesheets>
+        <URL value="@../style.css" />
+    </stylesheets>
+
+    <children>
+        <Text fill="#0091ea" layoutX="224.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bil Firma Menu" wrappingWidth="197.818359375">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Text>
+        <Button fx:id="contactPersonBtn" layoutX="125.0" layoutY="76.0" mnemonicParsing="false" onAction="#contactPersonBtn" prefHeight="25.0" prefWidth="411.0" text="Buyer Form" />
+        <Button fx:id="salgBtn" layoutX="124.0" layoutY="107.0" mnemonicParsing="false"  prefHeight="25.0" prefWidth="411.0" text="Salg Form" />
+        <Button fx:id="bilInfoBtn" layoutX="124.0" layoutY="140.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="411.0" text="Bil Info Form" />
+        <Button fx:id="closeBtn" layoutX="124.0" layoutY="204.0" mnemonicParsing="false" onAction="#colseBtn" prefHeight="25.0" prefWidth="411.0" text="Close" />
+
+
+
+
+
+
+
+    </children>
+</AnchorPane>
