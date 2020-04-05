@@ -120,7 +120,7 @@
                 <Font size="20.0" />
             </font>
         </Text>
-        <Text fill="#0091ea" layoutX="27.0" layoutY="377.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact Person List :">
+        <Text fill="#e0b9ea" layoutX="27.0" layoutY="377.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact Person List :">
             <font>
                 <Font size="20.0" />
             </font>
