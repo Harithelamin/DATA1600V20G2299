@@ -1,16 +1,4 @@
-.HBox, VBox {
-//css instructions here
--fx-background-color: white;
-    -fx-border-color: blue;
-    -fx-border-width: 3;
-    -fx-border-style: dashed;
-    -fx-padding: 10;
-    -fx-border-style: solid inside;
-    -fx-border-width: 2;
-    -fx-border-insets: 5;
-    -fx-border-radius: 5;
-    -fx-border-color: blue;
-}
+
 .root{
     -fx-border-width: 100;
     -fx-border-border-high:200 ;

@@ -11,7 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("menue/menue.fxml"));
-        primaryStage.setTitle("Bilfirma ");
+        primaryStage.setTitle("Bil Komponent ");
         primaryStage.setScene(new Scene(root, 650, 300));
         primaryStage.show();
     }

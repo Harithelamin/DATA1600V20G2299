@@ -2,34 +2,56 @@ package bilInfo;
 
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class BilInfo implements Serializable {
 
     //default serialVersion id
-    private static final long serialVersionUID = 1;
+    private static final long serialVersionUID = 1L;
+
+    private Date RegDato;
     private int bilId;
-    private Date lageti;   //2006/2015/2020
-    private String bilName;
-    private String bilMarka;
+    private String bil_type;
 
+    private double hestkrefter;
+    private String felg;
+    private String settetrekk;
+    private String ratt_type;
+    private String spoiler;
 
-    private String bilFarge;
-    private String bilEnergi;   //bensin/diesel/el
-    private float bilPrise;
+    private String farge;
+    private boolean integratedGPS;
+    private boolean soltak;
+    private boolean hegefester;
 
-    public BilInfo(int bilId, Date lageti, String bilName, String bilMarka, String bilFarge, String bilEnergi, float bilPrise) {
+    public BilInfo(){}
+
+    public BilInfo(Date regDato, int bilId, String bil_type, double hestkrefter, String felg, String settetrekk, String ratt_type, String spoiler, String farge, boolean integratedGPS, boolean soltak, boolean hegefester) {
+        RegDato = regDato;
         this.bilId = bilId;
-        this.lageti = lageti;
-        this.bilName = bilName;
-        this.bilMarka = bilMarka;
-        this.bilFarge = bilFarge;
-        this.bilEnergi = bilEnergi;
-        this.bilPrise = bilPrise;
+        this.bil_type = bil_type;
+        this.hestkrefter = hestkrefter;
+        this.felg = felg;
+        this.settetrekk = settetrekk;
+        this.ratt_type = ratt_type;
+        this.spoiler = spoiler;
+        this.farge = farge;
+        this.integratedGPS = integratedGPS;
+        this.soltak = soltak;
+        this.hegefester = hegefester;
     }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public Date getRegDato() {
+        return RegDato;
+    }
+
+    public void setRegDato(Date regDato) {
+        RegDato = regDato;
     }
 
     public int getBilId() {
@@ -40,65 +62,102 @@ public class BilInfo implements Serializable {
         this.bilId = bilId;
     }
 
-    public Date getLageti() {
-        return lageti;
+    public String getBil_type() {
+        return bil_type;
     }
 
-    public void setLageti(Date lageti) {
-        this.lageti = lageti;
+    public void setBil_type(String bil_type) {
+        this.bil_type = bil_type;
     }
 
-    public String getBilName() {
-        return bilName;
+    public double getHestkrefter() {
+        return hestkrefter;
     }
 
-    public void setBilName(String bilName) {
-        this.bilName = bilName;
+    public void setHestkrefter(double hestkrefter) {
+        this.hestkrefter = hestkrefter;
     }
 
-    public String getBilMarka() {
-        return bilMarka;
+    public String getFelg() {
+        return felg;
     }
 
-    public void setBilMarka(String bilMarka) {
-        this.bilMarka = bilMarka;
+    public void setFelg(String felg) {
+        this.felg = felg;
     }
 
-    public String getBilFarge() {
-        return bilFarge;
+    public String getSettetrekk() {
+        return settetrekk;
     }
 
-    public void setBilFarge(String bilFarge) {
-        this.bilFarge = bilFarge;
+    public void setSettetrekk(String settetrekk) {
+        this.settetrekk = settetrekk;
     }
 
-    public String getBilEnergi() {
-        return bilEnergi;
+    public String getRatt_type() {
+        return ratt_type;
     }
 
-    public void setBilEnergi(String bilEnergi) {
-        this.bilEnergi = bilEnergi;
+    public void setRatt_type(String ratt_type) {
+        this.ratt_type = ratt_type;
     }
 
-    public float getBilPrise() {
-        return bilPrise;
+    public String getSpoiler() {
+        return spoiler;
     }
 
-    public void setBilPrise(float bilPrise) {
-        this.bilPrise = bilPrise;
+    public void setSpoiler(String spoiler) {
+        this.spoiler = spoiler;
     }
+
+    public String getFarge() {
+        return farge;
+    }
+
+    public void setFarge(String farge) {
+        this.farge = farge;
+    }
+
+    public boolean isIntegratedGPS() {
+        return integratedGPS;
+    }
+
+    public void setIntegratedGPS(boolean integratedGPS) {
+        this.integratedGPS = integratedGPS;
+    }
+
+    public boolean isSoltak() {
+        return soltak;
+    }
+
+    public void setSoltak(boolean soltak) {
+        this.soltak = soltak;
+    }
+
+    public boolean isHegefester() {
+        return hegefester;
+    }
+
+    public void setHegefester(boolean hegefester) {
+        this.hegefester = hegefester;
+    }
+
 
     @Override
     public String toString() {
         return "BilInfo{" +
-                "bilId=" + bilId +
-                ", lageti=" + lageti +
-                ", bilName='" + bilName + '\'' +
-                ", bilMarka='" + bilMarka + '\'' +
-                ", bilFarge='" + bilFarge + '\'' +
-                ", bilEnergi='" + bilEnergi + '\'' +
-                ", bilPrise=" + bilPrise +
+                "RegDato=" + RegDato +
+                ", bilId=" + bilId +
+                ", bil_type='" + bil_type + '\'' +
+                ", hestkrefter=" + hestkrefter +
+                ", felg='" + felg + '\'' +
+                ", settetrekk='" + settetrekk + '\'' +
+                ", ratt_type='" + ratt_type + '\'' +
+                ", spoiler='" + spoiler + '\'' +
+                ", farge='" + farge + '\'' +
+                ", integratedGPS=" + integratedGPS +
+                ", soltak=" + soltak +
+                ", hegefester=" + hegefester +
                 '}';
     }
 }
-
