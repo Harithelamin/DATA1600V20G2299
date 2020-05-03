@@ -6,13 +6,12 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="494.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bilInfo.Controller">
+<AnchorPane prefHeight="494.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bilInfo.Controller">
    <stylesheets>
       <URL value="@style.css" />
    </stylesheets>
@@ -20,10 +19,14 @@
       <Pane layoutX="14.0" layoutY="14.0" prefHeight="468.0" prefWidth="200.0" style="-fx-background-color: #79ffb6;">
          <children>
             <Label layoutX="21.0" layoutY="11.0" prefHeight="17.0" prefWidth="161.0" text="Bil Register Form" />
-            <ImageView fx:id="imageView" fitHeight="417.0" fitWidth="200.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageView" fitHeight="417.0" fitWidth="200.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="lblPrs_koponents" layoutX="41.0" layoutY="291.0" text="lblPrs_koponents" />
+            <Label fx:id="lblPrs_mos" layoutX="41.0" layoutY="325.0" text="lblPrs_mos" />
+            <Label fx:id="lblPrs_totalPris" layoutX="41.0" layoutY="357.0" text="lblPrs_totalPris" />
+            <Button fx:id="btnSave" layoutX="8.0" layoutY="406.0" mnemonicParsing="false" onAction="#btnSave" prefHeight="25.0" prefWidth="183.0" text="Lagre" />
          </children>
       </Pane>
-      <ChoiceBox fx:id="bil_type" layoutX="314.0" layoutY="29.0" prefHeight="25.0" prefWidth="249.0" />
+      <ChoiceBox fx:id="bil_type" layoutX="314.0" layoutY="29.0" prefHeight="25.0" prefWidth="268.0" />
       <Group />
       <Label layoutX="232.0" layoutY="29.0" text="Biltype :">
          <font>
@@ -49,17 +52,27 @@
       <Label layoutX="250.0" layoutY="337.0" text="Integrated GPS :" />
       <Label layoutX="250.0" layoutY="367.0" text="Soltak :" />
       <Label layoutX="250.0" layoutY="398.0" text="HengerFeste :" />
-      <TextField fx:id="hestkrefter" layoutX="369.0" layoutY="120.0" prefHeight="25.0" prefWidth="192.0" />
-      <TextField fx:id="felg" layoutX="369.0" layoutY="149.0" prefHeight="25.0" prefWidth="192.0" />
-      <TextField fx:id="settetrekk" layoutX="369.0" layoutY="176.0" prefHeight="25.0" prefWidth="192.0" />
-      <ChoiceBox fx:id="ratt_type" layoutX="369.0" layoutY="206.0" prefHeight="25.0" prefWidth="192.0" />
-      <TextField fx:id="spoiler" layoutX="369.0" layoutY="237.0" prefHeight="25.0" prefWidth="192.0" />
-      <ChoiceBox fx:id="farge" layoutX="369.0" layoutY="296.0" prefHeight="25.0" prefWidth="192.0" />
-      <RadioButton fx:id="integratedGPS" layoutX="369.0" layoutY="337.0" mnemonicParsing="false" text="RadioButton" />
-      <RadioButton fx:id="soltak" layoutX="369.0" layoutY="367.0" mnemonicParsing="false" text="RadioButton" />
-      <RadioButton fx:id="hegefester" layoutX="369.0" layoutY="398.0" mnemonicParsing="false" text="RadioButton" />
-      <Button fx:id="btnSave" layoutX="263.0" layoutY="450.0" mnemonicParsing="false" onAction="#btnSave" prefHeight="25.0" prefWidth="73.0" text="Save" />
-      <Button fx:id="btnReset" layoutX="361.0" layoutY="450.0" mnemonicParsing="false" onAction="#btnReset" prefHeight="25.0" prefWidth="73.0" text="Reset" />
-      <Button fx:id="btnExit" layoutX="461.0" layoutY="450.0" mnemonicParsing="false" onAction="#btnExit" prefHeight="25.0" prefWidth="73.0" text="Exit" />
+      <ChoiceBox fx:id="hestkrefter" layoutX="387.0" layoutY="120.0" prefHeight="25.0" prefWidth="192.0" />
+      <ChoiceBox fx:id="felg" layoutX="387.0" layoutY="149.0" prefHeight="25.0" prefWidth="192.0" />
+      <ChoiceBox fx:id="settetrekk" layoutX="387.0" layoutY="176.0" prefHeight="25.0" prefWidth="192.0" />
+      <ChoiceBox fx:id="ratt_type" layoutX="387.0" layoutY="206.0" prefHeight="25.0" prefWidth="192.0" />
+      <ChoiceBox fx:id="spoiler" layoutX="387.0" layoutY="237.0" prefHeight="25.0" prefWidth="192.0" />
+      <ChoiceBox fx:id="farge" layoutX="387.0" layoutY="296.0" prefHeight="25.0" prefWidth="192.0" />
+      <RadioButton fx:id="integratedGPS" layoutX="387.0" layoutY="337.0" mnemonicParsing="false" text="RadioButton" />
+      <RadioButton fx:id="soltak" layoutX="387.0" layoutY="367.0" mnemonicParsing="false" text="RadioButton" />
+      <RadioButton fx:id="hegefester" layoutX="387.0" layoutY="398.0" mnemonicParsing="false" text="RadioButton" />
+      <Button fx:id="btnReset" layoutX="385.0" layoutY="437.0" mnemonicParsing="false" onAction="#btnReset" prefHeight="25.0" prefWidth="112.0" text="Nullstille" />
+      <Button fx:id="btnExit" layoutX="507.0" layoutY="437.0" mnemonicParsing="false" onAction="#btnExit" prefHeight="25.0" prefWidth="112.0" text="Ext" />
+      <Button fx:id="btnCalculate" layoutX="262.0" layoutY="437.0" mnemonicParsing="false" onAction="#btnCalculate" prefHeight="25.0" prefWidth="112.0" text="Regne ut" />
+      <Label fx:id="lblPrs_bil_type" layoutX="611.0" layoutY="33.0" text="lblPrs_bil_type" />
+      <Label fx:id="lblPrs_hestkrefter" layoutX="613.0" layoutY="124.0" text="lblPrs_hestkrefter" />
+      <Label fx:id="lblPrs_felg" layoutX="613.0" layoutY="153.0" text="lblPrs_felg" />
+      <Label fx:id="lblPrs_settetrekk" layoutX="613.0" layoutY="180.0" text="lblPrs_settetrekk" />
+      <Label fx:id="lblPrs_ratt_type" layoutX="613.0" layoutY="210.0" text="lblPrs_ratt_type" />
+      <Label fx:id="lblPrs_spoiler" layoutX="613.0" layoutY="242.0" text="lblPrs_spoiler" />
+      <Label fx:id="lblPrs_farge" layoutX="612.0" layoutY="300.0" text="lblPrs_farge" />
+      <Label fx:id="lblPrs_integratedGPS" layoutX="498.0" layoutY="337.0" text="lblPrs_integratedGPS" />
+      <Label fx:id="lblPrs_soltak" layoutX="498.0" layoutY="368.0" text="lblPrs_soltak" />
+      <Label fx:id="lblPrs_hegefester" layoutX="499.0" layoutY="400.0" text="lblPrs_hegefester" />
    </children>
 </AnchorPane>

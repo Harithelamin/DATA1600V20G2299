@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import komponentPriser.KomponentsPriser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +24,7 @@ import java.util.List;
 
 public class Main extends Application {
 
+
     public static String jobjSource = "src///resources///contactPerson.jobj";
 
 
@@ -30,7 +32,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("register.fxml"));
         primaryStage.setTitle("Bil Register Form");
-        primaryStage.setScene(new Scene(root, 650, 500));
+        primaryStage.setScene(new Scene(root, 750, 500));
         primaryStage.setResizable(false);
         primaryStage.show();
     }
@@ -113,5 +115,7 @@ public class Main extends Application {
         //System.out.println(date);
         return date;
     }
+
+
 
 }
