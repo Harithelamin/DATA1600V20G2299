@@ -5,20 +5,24 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import komponentPriser.*;
+import service.Repo;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
+import java.util.*;
 
 
 public class Controller implements Initializable {
     Main main= new Main();
+    Repo repo = new Repo();
     private Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+    //
 
     ObservableList bil_type_list = FXCollections.observableArrayList();
     ObservableList hestkrefters_list = FXCollections.observableArrayList();
@@ -28,9 +32,20 @@ public class Controller implements Initializable {
     ObservableList spoilers_list = FXCollections.observableArrayList();
     ObservableList farge_list = FXCollections.observableArrayList();
 
-
-
-
+    //price variables
+    double bil_typePris;
+    double fargePris;
+    double felgPris;
+    double hestekreftPris;
+    double ratt_typePris;
+    double settetrekkPris;
+    double spilerPris;
+    double integrateGPSPris;
+    double soltakPris;
+    double hengefestPris;
+    double komponenterPris;
+    double MVA;
+    double totalPris;
 
     @FXML
     private ImageView imageView;
@@ -78,14 +93,46 @@ public class Controller implements Initializable {
     @FXML
     private Label lblPrs_hegefester;
 
+    // To show the Currency type
+    @FXML
+    private Label lblNok1;
+    @FXML
+    private Label lblNok2;
+    @FXML
+    private Label lblNok3;
+    @FXML
+    private Label lblTotal;
+    @FXML
+    private Label lbMVA;
+    @FXML
+    private Label lblMåBetales;
+
 
 
     @FXML
     private Label lblPrs_koponents;
     @FXML
-    private Label lblPrs_mos;
+    private Label lblMVA;
     @FXML
     private Label lblPrs_totalPris;
+
+
+    //tableview
+    @FXML
+    private TableView<Bestilling> bistilling_Table= new TableView();
+    @FXML
+    private TableColumn<Bestilling, Date> bestillingDato;
+    @FXML
+    private TableColumn<Bestilling, Double> kPris;
+    @FXML
+    private TableColumn<Bestilling, Double> mVA;
+    @FXML
+    private TableColumn<Bestilling, Double> tPris;
+    @FXML
+    private Button btnDelete;
+
+
+
 
     //btnlabls
     @FXML
@@ -95,8 +142,9 @@ public class Controller implements Initializable {
     @FXML
     private void btnExit(){main.terminate();};
     @FXML
-    private void btnCalculate(){
+    private void btnCalculate() throws Exception {
         validationForm();
+        getCompnentsPriser();
     }
     @FXML
     private void btnReset(){
@@ -114,6 +162,15 @@ public class Controller implements Initializable {
         soltak.setSelected(false);
         hegefester.setSelected(false);
     }
+
+    //Bil Type table view.
+    public void populateBestillingTable() throws IOException, ClassNotFoundException {
+        bestillingDato.setCellValueFactory(new PropertyValueFactory<Bestilling, Date>("bestillingDato"));
+        kPris.setCellValueFactory(new PropertyValueFactory<Bestilling, Double>("kPris"));
+        mVA.setCellValueFactory(new PropertyValueFactory<Bestilling, Double>("mVA"));
+        tPris.setCellValueFactory(new PropertyValueFactory<Bestilling, Double>("tPris"));
+        bistilling_Table.getItems().setAll();
+    }
     @FXML
     private void btnSave()
     {
@@ -121,7 +178,7 @@ public class Controller implements Initializable {
 
         BilInfo bilInfo = new BilInfo();
         bilInfo.setRegDato(main.getCurrentDate());
-        bilInfo.setBil_type(bil_type.getValue());
+        bilInfo.setBil_type(bil_type.getValue().toLowerCase());
         bilInfo.setHestkrefter(Double.parseDouble(hestkrefter.getValue()));
         bilInfo.setFelg(felg.getValue());
         bilInfo.setSettetrekk(settetrekk.getValue());
@@ -132,16 +189,26 @@ public class Controller implements Initializable {
         bilInfo.setSoltak(soltak.isSelected());
         bilInfo.setHegefester(hegefester.isSelected());
 
+        Bestilling bestilling= new Bestilling();
+        bestilling.setBestillingDato(main.getCurrentDate());
+        bestilling.setBilInfo(bilInfo);
+        bestilling.setkPris(komponenterPris);
+        bestilling.setmVA(MVA);
+        bestilling.settPris(totalPris);
+        repo.lagreBestilling(bestilling);
+
+        //getCompnentsPriser(bilInfo);
+
         //saving
         //System.out.println(bilInfo.toString());
-        main.saveToObject(bilInfo);
-        main.loadObject();
+        repo.saveToObject(bilInfo);
+        //main.loadObject();
 
         //message to the user.
         //lbl_status.setText("Billen er registered!");
         //ready to register a new contact person.
         btnReset();
-        alert.setContentText("Bilen er registered!");
+        alert.setContentText("Bestilling er registered!");
         alert.showAndWait();
 
     }
@@ -205,80 +272,43 @@ public class Controller implements Initializable {
 
     }
 
-    public void fillpriser(){
-        KomponentsPriser komponentsPriser= new KomponentsPriser();
-        komponentsPriser.setPriserDato(main.getCurrentDate());
-
-        ArrayList<Bil_type> bil_types = new ArrayList<Bil_type>();
-        bil_types.add(new Bil_type("Elektrisk",50000.00));
-        bil_types.add(new Bil_type("Bensin",32000.00));
-        bil_types.add(new Bil_type("Hybrid",132000.00));
-        komponentsPriser.setBil_type(bil_types);
-
+    public void fillpriser() {
+        ArrayList<Bil_type> bil_types = new ArrayList<>();
+        bil_types = (ArrayList<Bil_type>) repo.load_Bil_Type_List();
         loadBilTypeData(bil_types);
 
-
         ArrayList<Hestkrefter> hestkrefters = new ArrayList<>();
-        hestkrefters.add(new Hestkrefter("2.0", 12000.00));
-        hestkrefters.add(new Hestkrefter("2.2", 14000.00));
-        hestkrefters.add(new Hestkrefter("3.0", 16400.00));
-        komponentsPriser.setHestkrefter(hestkrefters);
-        
+        hestkrefters = (ArrayList<Hestkrefter>) repo.load_Hestkrefter_List();
         loadHestkrefterData(hestkrefters);
 
-        ArrayList<Felg>felgs = new ArrayList<>();
-        felgs.add(new Felg("Classic", 40000.00));
-        felgs.add(new Felg("Nikel", 49000.00));
-        felgs.add(new Felg("Alamonum", 70000.00));
-        komponentsPriser.setFelg(felgs);
-        
+        ArrayList<Felg> felgs = new ArrayList<>();
+        felgs = (ArrayList<Felg>) repo.load_Felg_List();
         loadFelgData(felgs);
 
-        ArrayList<Settetrekk>settetrekks = new ArrayList<>();
-        settetrekks.add(new Settetrekk("Plastik",49000.00));
-        settetrekks.add(new Settetrekk("Skin",62000.00));
-        komponentsPriser.setSettetrekk(settetrekks);
-
+        ArrayList<Settetrekk> settetrekks = new ArrayList<>();
+        settetrekks = (ArrayList<Settetrekk>) repo.load_Settetrekk_List();
         loadSettetrekkData(settetrekks);
 
         ArrayList<Ratt_type> ratt_types = new ArrayList<>();
-        ratt_types.add(new Ratt_type("Vanlig",21000.00));
-        ratt_types.add(new Ratt_type("Klassik",29000.00));
-        ratt_types.add(new Ratt_type("Sport",35000.00));
-        komponentsPriser.setRatt_type(ratt_types);
-
+        ratt_types = (ArrayList<Ratt_type>) repo.load_Ratt_type_List();
         loadRattTypeData(ratt_types);
 
-        ArrayList<Spoiler>spoilers = new ArrayList<>();
-        spoilers.add(new Spoiler("Med Spoiler", 16000.20));
-        spoilers.add(new Spoiler("Uten Spoiler", 00.00));
-        komponentsPriser.setSpoiler(spoilers);
-
+        ArrayList<Spoiler> spoilers = new ArrayList<>();
+        spoilers = (ArrayList<Spoiler>) repo.load_Spoiler_List();
         loadSpoilerData(spoilers);
 
-        ArrayList<Farge>farges = new ArrayList<>();
-        farges.add(new Farge("Hvit", 34000.00));
-        farges.add(new Farge("Svart", 36080.00));
-        farges.add(new Farge("Rød", 33600.00));
-        farges.add(new Farge("Blue", 31750.00));
-        komponentsPriser.setFarge(farges);
-
+        ArrayList<Farge> farges = new ArrayList<>();
+        farges = (ArrayList<Farge>) repo.load_Farge_List();
         loadFargeData(farges);
 
-        komponentsPriser.setIntegratedGPS(16870.00);
-        komponentsPriser.setSoltak(12500.00);
-        komponentsPriser.setHegefester(8210.00);
-        System.out.println(komponentsPriser.toString());
     }
 
     private void loadBilTypeData(ArrayList<Bil_type> bil_types){
         bil_type_list.removeAll();
-
         for (int i = 0; i <bil_types.size();i++)
         {
             bil_type_list.add(bil_types.get(i).navn);
         }
-
         bil_type.getItems().addAll(bil_type_list);
     }
 
@@ -348,15 +378,194 @@ public class Controller implements Initializable {
         lblPrs_soltak.setVisible(false);
         lblPrs_hegefester.setVisible(false);
 
+        lblNok1.setVisible(false);
+        lblNok2.setVisible(false);
+        lblNok3.setVisible(false);
+
+        lblTotal.setVisible(false);
+        lbMVA.setVisible(false);
+        lblMåBetales.setVisible(false);
+
         lblPrs_koponents.setVisible(false);
-        lblPrs_mos.setVisible(false);
+        lblMVA.setVisible(false);
         lblPrs_totalPris.setVisible(false);
 
         btnSave.setVisible(false);
     }
-
-    private void getCompnentsPriser(){
+    //find bil type price
+    public void getBilTypePris(){
+        try {
+            bil_typePris =(repo.getBilTypePris(bil_type.getValue().toLowerCase().trim()));
+            //show the price in the form
+            lblPrs_bil_type.setText(String.valueOf(bil_typePris));
+            lblPrs_bil_type.setVisible(true);
+            //add it to the components price
+            komponenterPris=komponenterPris+bil_typePris;
+        }
+        catch (NullPointerException e){}
 
     }
+
+    //find farge price
+    public void getFargePris(){
+        try {
+            fargePris =(repo.getFargePris(farge.getValue().toLowerCase().trim()));
+            //show the price in the form
+            lblPrs_farge.setText(String.valueOf(fargePris));
+            lblPrs_farge.setVisible(true);
+
+            //add it to the components price
+            komponenterPris=komponenterPris+fargePris;
+        } catch (NullPointerException e){}
+
+    }
+    //find felg price
+    public void getFelgPris(){
+        try {
+            felgPris =(repo.getFelgPris(felg.getValue().toLowerCase().trim()));
+            //show the price in the form
+            lblPrs_felg.setText(String.valueOf(felgPris));
+            lblPrs_felg.setVisible(true);
+
+            //add it to the components price
+            komponenterPris=komponenterPris+felgPris;
+        }catch (NullPointerException e){}
+
+    }
+    //find Hestekrefter price
+    public void getHestekrefterPris(){
+        try {
+            hestekreftPris =(repo.getHestkrefterPris(hestkrefter.getValue().toLowerCase().trim()));
+            //show the price in the form
+            lblPrs_hestkrefter.setText(String.valueOf(hestekreftPris));
+            lblPrs_hestkrefter.setVisible(true);
+
+            //add it to the components price
+            komponenterPris=komponenterPris+hestekreftPris;
+        }
+        catch (NullPointerException e){}
+
+    }
+    //find ratt type price
+    public void getRattTypePris(){
+        try {
+            ratt_typePris =(repo.getRatt_typePris(ratt_type.getValue().toLowerCase().trim()));
+            //show the price in the form
+            lblPrs_ratt_type.setText(String.valueOf(ratt_typePris));
+            lblPrs_ratt_type.setVisible(true);
+
+            //add it to the components price
+            komponenterPris=komponenterPris+ratt_typePris;
+        }catch (NullPointerException e){}
+
+    }
+    //find settetrekk price
+    public void getSettetrekkPris(){
+        try {
+            settetrekkPris =(repo.getSettetrekkPris(settetrekk.getValue().toLowerCase().trim()));
+            //show the price in the form
+            lblPrs_settetrekk.setText(String.valueOf(settetrekkPris));
+            lblPrs_settetrekk.setVisible(true);
+
+            //add it to the components price
+            komponenterPris=komponenterPris+settetrekkPris;
+        }catch (NullPointerException e){}
+
+    }
+    //find Spoiler price
+    public void getSpoilerPris(){
+        try {
+            spilerPris =(repo.getSpoilerPris(spoiler.getValue().toLowerCase().trim()));
+            //show the price in the form
+            lblPrs_spoiler.setText(String.valueOf(spilerPris));
+            lblPrs_spoiler.setVisible(true);
+
+            //add it to the components price
+            komponenterPris=komponenterPris+spilerPris;
+        }catch (NullPointerException e){}
+
+    }
+    //find IntegrateGPS price
+    public void getIntegrateGPSPris(){
+        if (integratedGPS.isSelected())
+        {
+            repo.loadIntegratedGPS();
+            integrateGPSPris=repo.loadIntegratedGPS();
+            lblPrs_integratedGPS.setText(String.valueOf(integrateGPSPris));
+            lblPrs_integratedGPS.setVisible(true);
+            //add it to the components price
+            komponenterPris=komponenterPris+integrateGPSPris;
+
+        }
+    }
+    //find Soltak price
+    public void getSoltakSPris(){
+        if (soltak.isSelected()) {
+            repo.loadSoltak();
+            soltakPris = repo.loadSoltak();
+            lblPrs_soltak.setText(String.valueOf(soltakPris));
+            lblPrs_soltak.setVisible(true);
+            //add it to the components price
+            komponenterPris = komponenterPris + soltakPris;
+        }
+    }
+
+    //find Hengerfeste price
+    public void getHengerfestePris(){
+        if (hegefester.isSelected()) {
+            repo.loadHegefester();
+            hengefestPris = repo.loadHegefester();
+            lblPrs_hegefester.setText(String.valueOf(hengefestPris));
+            lblPrs_hegefester.setVisible(true);
+            //add it to the components price
+            komponenterPris = komponenterPris + hengefestPris;
+        }
+    }
+
+
+
+    private void getCompnentsPriser() throws Exception{
+
+        //set the komponenterPris equal null
+        komponenterPris=0.00;
+        //calcuating the total pice, and show it in th form.
+        getBilTypePris();
+        getFargePris();
+        getFelgPris();
+        getHestekrefterPris();
+        getRattTypePris();
+        getSettetrekkPris();
+        getSpoilerPris();
+        getIntegrateGPSPris();
+        getSoltakSPris();
+        getHengerfestePris();
+
+        //calc MVA
+        MVA=komponenterPris* 0.15;
+        //get total with MVA
+        totalPris=komponenterPris+MVA;
+
+        //sitt the results in the form
+        lblPrs_koponents.setText(String.valueOf(komponenterPris));
+        lblMVA.setText(String.valueOf(MVA));
+        lblPrs_totalPris.setText(String.valueOf(totalPris));
+
+        lblPrs_koponents.setVisible(true);
+        lblMVA.setVisible(true);
+        lblPrs_totalPris.setVisible(true);
+
+        //show the currency type in the form
+        lblNok1.setVisible(true);
+        lblNok2.setVisible(true);
+        lblNok3.setVisible(true);
+
+        lblTotal.setVisible(true);
+        lbMVA.setVisible(true);
+        lblMåBetales.setVisible(true);
+
+        //show save button after calculating
+        btnSave.setVisible(true);
+    }
+
 }
 

@@ -10,6 +10,7 @@ public class KomponentsPriser implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Date priserDato;
+
     private ArrayList<Bil_type> bil_type;
     private ArrayList<Hestkrefter> hestkrefter;
     private ArrayList<Felg> felg;
