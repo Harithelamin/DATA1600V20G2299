@@ -10,8 +10,6 @@ public class BilInfo implements Serializable {
     //default serialVersion id
     private static final long serialVersionUID = 1L;
 
-    private Date RegDato;
-    private int bilId;
     private String bil_type;
 
     private double hestkrefter;
@@ -27,9 +25,7 @@ public class BilInfo implements Serializable {
 
     public BilInfo(){}
 
-    public BilInfo(Date regDato, int bilId, String bil_type, double hestkrefter, String felg, String settetrekk, String ratt_type, String spoiler, String farge, boolean integratedGPS, boolean soltak, boolean hegefester) {
-        RegDato = regDato;
-        this.bilId = bilId;
+    public BilInfo(String bil_type, double hestkrefter, String felg, String settetrekk, String ratt_type, String spoiler, String farge, boolean integratedGPS, boolean soltak, boolean hegefester) {
         this.bil_type = bil_type;
         this.hestkrefter = hestkrefter;
         this.felg = felg;
@@ -42,25 +38,14 @@ public class BilInfo implements Serializable {
         this.hegefester = hegefester;
     }
 
+    public BilInfo(BilInfo bilInfo) {
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public Date getRegDato() {
-        return RegDato;
-    }
 
-    public void setRegDato(Date regDato) {
-        RegDato = regDato;
-    }
-
-    public int getBilId() {
-        return bilId;
-    }
-
-    public void setBilId(int bilId) {
-        this.bilId = bilId;
-    }
 
     public String getBil_type() {
         return bil_type;
@@ -146,8 +131,6 @@ public class BilInfo implements Serializable {
     @Override
     public String toString() {
         return "BilInfo{" +
-                "RegDato=" + RegDato +
-                ", bilId=" + bilId +
                 ", bil_type='" + bil_type + '\'' +
                 ", hestkrefter=" + hestkrefter +
                 ", felg='" + felg + '\'' +

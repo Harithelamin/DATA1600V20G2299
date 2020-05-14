@@ -7,7 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import komponentPriser.*;
-import service.Repo;
+import service.ProduktService;
+import service.ProduktServiceImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,7 +29,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("register.fxml"));
         primaryStage.setTitle("Bil Register Form");
-        primaryStage.setScene(new Scene(root, 750, 700));
+        primaryStage.setScene(new Scene(root, 750, 800));
         primaryStage.setResizable(false);
         primaryStage.show();
     }
@@ -42,6 +43,10 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    private ProduktService produktService= new ProduktServiceImpl();
+    public ArrayList<Produkt> produkts= (ArrayList<Produkt>) produktService.Produkt();
+
 
 
     //This method to return the current date on format "yyyy.MM.dd".

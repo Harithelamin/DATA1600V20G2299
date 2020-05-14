@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="690.0" prefWidth="1162.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="admin.Controller">
+   <stylesheets>
+      <URL value="@../style.css" />
+   </stylesheets>
+   <children>
+      <Pane layoutX="14.0" layoutY="3.0" prefHeight="676.0" prefWidth="112.0" style="-fx-background-color: #79ffb6;">
+         <children>
+            <Label layoutX="21.0" layoutY="11.0" prefHeight="17.0" prefWidth="161.0" text="Admin Page" />
+            <Button fx:id="btnSave" layoutX="6.0" layoutY="38.0" mnemonicParsing="false" onAction="#btnOrder" prefHeight="305.0" prefWidth="100.0" text="Produkter" />
+            <Button fx:id="btnExit" layoutX="7.0" layoutY="359.0" mnemonicParsing="false" onAction="#btnExit" prefHeight="305.0" prefWidth="97.0" text="Exit" />
+         </children>
+      </Pane>
+      <Group />
+      <Label layoutX="144.0" layoutY="240.0" text="Biltype Priser :">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnDelete" layoutX="576.0" layoutY="296.0" mnemonicParsing="false" onAction="#btnDelete" prefHeight="25.0" prefWidth="59.0" text="Fjerne" />
+      <Button fx:id="btnAdd" layoutX="428.0" layoutY="296.0" mnemonicParsing="false" onAction="#btnAdd" prefHeight="25.0" prefWidth="145.0" text="Legg til Bil Type" />
+      <TableView fx:id="bil_Type_Table" layoutX="260.0" layoutY="235.0" prefHeight="88.0" prefWidth="159.0">
+        <columns>
+          <TableColumn fx:id="navn" prefWidth="75.0" text="Item" />
+          <TableColumn fx:id="pris" prefWidth="75.0" text="Pris" />
+        </columns>
+      </TableView>
+      <TextField fx:id="txtnavn" layoutX="476.0" layoutY="236.0" />
+      <TextField fx:id="txtpris" layoutX="476.0" layoutY="266.0" />
+      <Label layoutX="425.0" layoutY="240.0" prefHeight="17.0" prefWidth="59.0" text="Bil Type" />
+      <Label layoutX="436.0" layoutY="269.0" text="Pris" />
+      <TableView fx:id="hestkrefterTable" layoutX="260.0" layoutY="323.0" prefHeight="88.0" prefWidth="159.0">
+        <columns>
+          <TableColumn fx:id="hesekrefteNavn" prefWidth="75.0" text="Item" />
+          <TableColumn fx:id="hesekreftepris" prefWidth="75.0" text="Pris" />
+        </columns>
+      </TableView>
+      <Label layoutX="144.0" layoutY="330.0" text="Hestkrefters Priser:" />
+      <TextField fx:id="txtHestkrefterNavn" layoutX="479.0" layoutY="328.0" prefHeight="25.0" prefWidth="159.0" />
+      <TextField fx:id="txtHestkrefterPris" layoutX="479.0" layoutY="357.0" prefHeight="25.0" prefWidth="159.0" />
+      <Label layoutX="433.0" layoutY="147.0" />
+      <Label layoutX="437.0" layoutY="360.0" text="Pris" />
+      <Button fx:id="btnAddHestkrefter" layoutX="429.0" layoutY="385.0" mnemonicParsing="false" onAction="#btnAddHestkrefter" prefHeight="25.0" prefWidth="145.0" text="Legg til Hestkreft" />
+      <Button fx:id="btnDeleteHestkrefter" layoutX="577.0" layoutY="385.0" mnemonicParsing="false" onAction="#btnDeleteHestkrefter" prefHeight="25.0" prefWidth="59.0" text="Fjerne" />
+      <Label layoutX="424.0" layoutY="333.0" text="Hestkreft" />
+      <TableView fx:id="felgTable" layoutX="260.0" layoutY="411.0" prefHeight="88.0" prefWidth="159.0">
+        <columns>
+          <TableColumn fx:id="felgNavn" prefWidth="75.0" text="Item" />
+          <TableColumn fx:id="felgpris" prefWidth="75.0" text="Pris" />
+        </columns>
+      </TableView>
+      <Label layoutX="151.0" layoutY="416.0" text="Felg Priser :" />
+      <Label layoutX="437.0" layoutY="419.0" text="Felg" />
+      <Label layoutX="438.0" layoutY="446.0" text="Pris" />
+      <TextField fx:id="txtFelgNavn" layoutX="484.0" layoutY="415.0" prefHeight="25.0" prefWidth="153.0" />
+      <TextField fx:id="txtFelgPris" layoutX="484.0" layoutY="442.0" prefHeight="25.0" prefWidth="153.0" />
+      <Button fx:id="btnAddFelg" layoutX="427.0" layoutY="470.0" mnemonicParsing="false" onAction="#btnAddFelg" prefHeight="25.0" prefWidth="145.0" text="Add Felg" />
+      <Button fx:id="btnDeleteFelg" layoutX="577.0" layoutY="471.0" mnemonicParsing="false" onAction="#btnDeleteFelg" prefHeight="25.0" prefWidth="59.0" text="Fjerne" />
+      <Label layoutX="149.0" layoutY="504.0" text="Settetrekk Priser:" />
+      <Label layoutX="423.0" layoutY="505.0" text="Settetrekk" />
+      <Label layoutX="440.0" layoutY="536.0" text="Pris" />
+      <TableView fx:id="Settetrekk_Table" layoutX="259.0" layoutY="499.0" prefHeight="81.0" prefWidth="159.0">
+        <columns>
+          <TableColumn fx:id="settetrekkNavn" prefWidth="75.0" text="Item" />
+          <TableColumn fx:id="settetrekkPris" prefWidth="75.0" text="Pris" />
+        </columns>
+      </TableView>
+      <TextField fx:id="txtSettetrekkNavn" layoutX="489.0" layoutY="501.0" prefHeight="25.0" prefWidth="145.0" />
+      <TextField fx:id="txtSettetrekkPris" layoutX="488.0" layoutY="532.0" prefHeight="25.0" prefWidth="145.0" />
+      <Button fx:id="btnAddSettetrekk" layoutX="426.0" layoutY="559.0" mnemonicParsing="false" onAction="#btnAddSettetrekk" prefHeight="25.0" prefWidth="145.0" text="Legg til Settetrekk" />
+      <Button fx:id="btnDeleteSettetrekk" layoutX="575.0" layoutY="559.0" mnemonicParsing="false" onAction="#btnDeleteSettetrekk" prefHeight="25.0" prefWidth="59.0" text="Fjerne" />
+      <Label layoutX="650.0" layoutY="250.0" text="Ratt Priser :" />
+      <Label layoutX="922.0" layoutY="255.0" text="Ratt_types" />
+      <Label layoutX="932.0" layoutY="281.0" text="Pris" />
+      <TableView fx:id="Ratt_typeTable" layoutX="749.0" layoutY="235.0" prefHeight="81.0" prefWidth="159.0">
+        <columns>
+          <TableColumn fx:id="ratt_typeNavn" prefWidth="75.0" text="Item" />
+          <TableColumn fx:id="ratt_typepris" prefWidth="75.0" text="Pris" />
+        </columns>
+      </TableView>
+      <TextField fx:id="txtRatt_typeNavn" layoutX="984.0" layoutY="249.0" prefHeight="25.0" prefWidth="139.0" />
+      <TextField fx:id="txtRatt_typePris" layoutX="983.0" layoutY="279.0" prefHeight="25.0" prefWidth="139.0" />
+      <Button fx:id="btnAddRatt_type" layoutX="911.0" layoutY="306.0" mnemonicParsing="false" onAction="#btnAddRatt_type" prefHeight="25.0" prefWidth="145.0" text="Legge til Ratt" />
+      <Button fx:id="btnDeleteRatt_type" layoutX="1060.0" layoutY="305.0" mnemonicParsing="false" onAction="#btnDeleteRatt_type" prefHeight="25.0" prefWidth="59.0" text="Fjerne" />
+      <Label layoutX="649.0" layoutY="332.0" text="Spoiler Priser :" />
+      <Label layoutX="933.0" layoutY="338.0" text="Spoiler" />
+      <Label layoutX="937.0" layoutY="364.0" text="Pris" />
+      <TableView fx:id="SpoilerTable" layoutX="749.0" layoutY="315.0" prefHeight="81.0" prefWidth="159.0">
+        <columns>
+          <TableColumn fx:id="spoilerNavn" prefWidth="75.33331298828125" text="Item" />
+          <TableColumn fx:id="spoilerPris" prefWidth="76.0" text="Pris" />
+        </columns>
+      </TableView>
+      <TextField fx:id="txtSpoilerNavn" layoutX="982.0" layoutY="333.0" prefHeight="25.0" prefWidth="139.0" />
+      <TextField fx:id="txtSpoilerPris" layoutX="983.0" layoutY="359.0" prefHeight="25.0" prefWidth="139.0" />
+      <Button fx:id="btnAddSpoiler" layoutX="913.0" layoutY="385.0" mnemonicParsing="false" onAction="#btnAddSpoiler" prefHeight="25.0" prefWidth="145.0" text="Legge til Spoiler" />
+      <Button fx:id="btnDeleteSpoiler" layoutX="1062.0" layoutY="384.0" mnemonicParsing="false" onAction="#btnDeleteSpoiler" prefHeight="25.0" prefWidth="59.0" text="Fjerne" />
+      <Label layoutX="649.0" layoutY="402.0" text="Farge Priser :" />
+      <Label layoutX="935.0" layoutY="414.0" text="Farge" />
+      <Label layoutX="937.0" layoutY="435.0" text="Pris" />
+      <TextField fx:id="txtFargeNavn" layoutX="985.0" layoutY="413.0" prefHeight="25.0" prefWidth="139.0" />
+      <TextField fx:id="txtFargePris" layoutX="985.0" layoutY="439.0" prefHeight="25.0" prefWidth="139.0" />
+      <Button fx:id="btnAddFarge" layoutX="914.0" layoutY="467.0" mnemonicParsing="false" onAction="#btnAddFarge" prefHeight="25.0" prefWidth="145.0" text="Legge til Farge" />
+      <Button fx:id="btnDeleteFarge" layoutX="1063.0" layoutY="466.0" mnemonicParsing="false" onAction="#btnDeleteFarge" prefHeight="25.0" prefWidth="59.0" text="Fjerne" />
+      <TableView fx:id="FargeTable" layoutX="749.0" layoutY="396.0" prefHeight="81.0" prefWidth="159.0">
+        <columns>
+          <TableColumn fx:id="fargeNavn" prefWidth="75.0" text="Item" />
+          <TableColumn fx:id="fargePris" prefWidth="75.0" text="Pris" />
+        </columns>
+      </TableView>
+      <Label layoutX="650.0" layoutY="521.0" text="IntegratedGPS Pris :" />
+      <Label layoutX="652.0" layoutY="547.0" text="Soltak Pris :" />
+      <Label layoutX="652.0" layoutY="572.0" text="Hengefester Pris :" />
+      <TextField fx:id="txtIntegratedGPSPris" layoutX="771.0" layoutY="516.0" prefHeight="9.0" prefWidth="159.0" />
+      <TextField fx:id="txtSoltakPris" layoutX="772.0" layoutY="543.0" prefHeight="1.0" prefWidth="159.0" />
+      <TextField fx:id="txtHegefesterPris" layoutX="773.0" layoutY="569.0" prefHeight="1.0" prefWidth="159.0" />
+      <Button fx:id="btnUpdateIntegratedGPSPris" layoutX="937.0" layoutY="516.0" mnemonicParsing="false" onAction="#btnUpdateIntegratedGPSPris" prefHeight="25.0" prefWidth="208.0" text="Endre IntegratedGPS Pris" />
+      <Button fx:id="btnUpdateSoltakPris" layoutX="937.0" layoutY="544.0" mnemonicParsing="false" onAction="#btnUpdateSoltakPris" prefHeight="25.0" prefWidth="208.0" text="Endre Soltak Pris" />
+      <Button fx:id="btnUpdateHegefesterPris" layoutX="937.0" layoutY="572.0" mnemonicParsing="false" onAction="#btnUpdateHegefesterPris" prefHeight="25.0" prefWidth="208.0" text="Endre Hengefester Pris" />
+      <Pane layoutX="146.0" layoutY="14.0" prefHeight="200.0" prefWidth="515.0" style="-fx-background-color: #6f63ff;">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" text="Brukere :" />
+            <TableView fx:id="UsersTable" layoutX="14.0" layoutY="35.0" prefHeight="151.0" prefWidth="228.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Navn" />
+                <TableColumn prefWidth="75.0" text="Password" />
+              </columns>
+            </TableView>
+            <Label layoutX="293.0" layoutY="45.0" text="Navn :" />
+            <Label layoutX="294.0" layoutY="91.0" text="Passord :" />
+            <TextField layoutX="346.0" layoutY="41.0" prefHeight="25.0" prefWidth="145.0" />
+            <TextField layoutX="346.0" layoutY="78.0" prefHeight="25.0" prefWidth="145.0" />
+            <Button layoutX="298.0" layoutY="132.0" mnemonicParsing="false" text="Legge til Brukene" />
+            <Button layoutX="424.0" layoutY="132.0" mnemonicParsing="false" text="Fjerne" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

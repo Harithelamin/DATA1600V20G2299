@@ -1,15 +1,27 @@
 package bilInfo;
 
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 import komponentPriser.*;
-import service.Repo;
+import service.AdminService;
+import service.AdminServiceImpl;
+import service.ProduktService;
+import service.ProduktServiceImpl;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -19,11 +31,11 @@ import java.util.*;
 
 public class Controller implements Initializable {
     Main main= new Main();
-    Repo repo = new Repo();
+    private AdminService adminService=new AdminServiceImpl();
+    private ProduktService productService= new ProduktServiceImpl();
     private Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
-    //
-
+    //price lists
     ObservableList bil_type_list = FXCollections.observableArrayList();
     ObservableList hestkrefters_list = FXCollections.observableArrayList();
     ObservableList felgs_list = FXCollections.observableArrayList();
@@ -31,6 +43,7 @@ public class Controller implements Initializable {
     ObservableList ratt_type_list = FXCollections.observableArrayList();
     ObservableList spoilers_list = FXCollections.observableArrayList();
     ObservableList farge_list = FXCollections.observableArrayList();
+
 
     //price variables
     double bil_typePris;
@@ -46,6 +59,8 @@ public class Controller implements Initializable {
     double komponenterPris;
     double MVA;
     double totalPris;
+
+    boolean validated= false;
 
     @FXML
     private ImageView imageView;
@@ -119,20 +134,15 @@ public class Controller implements Initializable {
 
     //tableview
     @FXML
-    private TableView<Bestilling> bistilling_Table= new TableView();
+    private TableView<Produkt> produktr_Table= new TableView<>();
     @FXML
-    private TableColumn<Bestilling, Date> bestillingDato;
+    private TableColumn<Produkt, Date> c1;
     @FXML
-    private TableColumn<Bestilling, Double> kPris;
+    private TableColumn<Produkt, String> c3;
     @FXML
-    private TableColumn<Bestilling, Double> mVA;
-    @FXML
-    private TableColumn<Bestilling, Double> tPris;
+    private TableColumn c2,c4;
     @FXML
     private Button btnDelete;
-
-
-
 
     //btnlabls
     @FXML
@@ -140,7 +150,22 @@ public class Controller implements Initializable {
     @FXML
     private Button btnReset;
     @FXML
-    private void btnExit(){main.terminate();};
+    private void btnExit(ActionEvent event){
+        //main.terminate();
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getClassLoader().getResource("menue/menue.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Produkter Form");
+            stage.setScene(new Scene(root, 750, 500));
+            stage.show();
+            // Hide this current window (if this is what you want)
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    };
     @FXML
     private void btnCalculate() throws Exception {
         validationForm();
@@ -164,98 +189,115 @@ public class Controller implements Initializable {
     }
 
     //Bil Type table view.
-    public void populateBestillingTable() throws IOException, ClassNotFoundException {
-        bestillingDato.setCellValueFactory(new PropertyValueFactory<Bestilling, Date>("bestillingDato"));
-        kPris.setCellValueFactory(new PropertyValueFactory<Bestilling, Double>("kPris"));
-        mVA.setCellValueFactory(new PropertyValueFactory<Bestilling, Double>("mVA"));
-        tPris.setCellValueFactory(new PropertyValueFactory<Bestilling, Double>("tPris"));
-        bistilling_Table.getItems().setAll();
+    public void populateProduktTable() throws IOException, ClassNotFoundException {
+        c1.setCellValueFactory(new PropertyValueFactory<>("registreringDato"));
+        //c2.setCellValueFactory(new PropertyValueFactory<>("kPris"));
+        c3.setCellValueFactory(new PropertyValueFactory<Produkt, String>("kPris"));
+        //produktr_Table.getItems().setAll(main.produkts);
     }
+
+
     @FXML
-    private void btnSave()
-    {
-        validationForm();
+    private void btnSave() throws Exception {
+        if (!validated)
+        {
+            alert.setContentText("Alle felt må fylles ut !");
+            alert.showAndWait();
+            getCompnentsPriser();
+        }
+        else {
+            try {
+                //Bill info object
+                BilInfo bilInfo = new BilInfo();
+                bilInfo.setBil_type(bil_type.getValue().toLowerCase());
+                bilInfo.setHestkrefter(Double.parseDouble(hestkrefter.getValue()));
+                bilInfo.setFelg(felg.getValue());
+                bilInfo.setSettetrekk(settetrekk.getValue());
+                bilInfo.setRatt_type(ratt_type.getValue());
+                bilInfo.setSpoiler(spoiler.getValue());
+                bilInfo.setFarge(farge.getValue());
+                bilInfo.setIntegratedGPS(integratedGPS.isSelected());
+                bilInfo.setSoltak(soltak.isSelected());
+                bilInfo.setHegefester(hegefester.isSelected());
 
-        BilInfo bilInfo = new BilInfo();
-        bilInfo.setRegDato(main.getCurrentDate());
-        bilInfo.setBil_type(bil_type.getValue().toLowerCase());
-        bilInfo.setHestkrefter(Double.parseDouble(hestkrefter.getValue()));
-        bilInfo.setFelg(felg.getValue());
-        bilInfo.setSettetrekk(settetrekk.getValue());
-        bilInfo.setRatt_type(ratt_type.getValue());
-        bilInfo.setSpoiler(spoiler.getValue());
-        bilInfo.setFarge(farge.getValue());
-        bilInfo.setIntegratedGPS(integratedGPS.isSelected());
-        bilInfo.setSoltak(soltak.isSelected());
-        bilInfo.setHegefester(hegefester.isSelected());
+                //product object
+                Produkt produkt = new Produkt();
+                produkt.setRegistreringDato(main.getCurrentDate());
+                produkt.setkPris(komponenterPris);
+                produkt.setmVA(MVA);
+                produkt.settPris(totalPris);
+                produkt.setBilInfo(bilInfo);
+                System.out.println("++++++++++++++++++++++++");
+                System.out.println(produkt.toString());
+                main.produkts.add(produkt);
+                //produktr_Table.getItems().add(produkt);
+                //produktr_Table.refresh();
+                //populateProduktTable();
 
-        Bestilling bestilling= new Bestilling();
-        bestilling.setBestillingDato(main.getCurrentDate());
-        bestilling.setBilInfo(bilInfo);
-        bestilling.setkPris(komponenterPris);
-        bestilling.setmVA(MVA);
-        bestilling.settPris(totalPris);
-        repo.lagreBestilling(bestilling);
+                System.out.println("=======================");
+                System.out.println(main.produkts.toString());
 
-        //getCompnentsPriser(bilInfo);
 
-        //saving
-        //System.out.println(bilInfo.toString());
-        repo.saveToObject(bilInfo);
-        //main.loadObject();
 
-        //message to the user.
-        //lbl_status.setText("Billen er registered!");
-        //ready to register a new contact person.
-        btnReset();
-        alert.setContentText("Bestilling er registered!");
-        alert.showAndWait();
+
+            } catch (NullPointerException e) {
+            }
+        }
 
     }
 
     private void validationForm() {
+        validated=false;
         if ((bil_type.getSelectionModel().isEmpty())) {
             alert.setContentText("Biltypen er påkrevd!");
             alert.showAndWait();
             bil_type.getStyleClass().add("custom");
+            validated=false;
             return;
         }
         if ((hestkrefter.getSelectionModel().isEmpty())) {
             alert.setContentText("Hestkreften er påkrevd!");
             alert.showAndWait();
             bil_type.getStyleClass().add("custom");
+            validated=false;
             return;
         }
         if (felg.getSelectionModel().isEmpty()){
             alert.setContentText("Felgen er påkrevd!");
             alert.showAndWait();
             bil_type.getStyleClass().add("custom");
+            validated=false;
             return;
         }
         if (settetrekk.getSelectionModel().isEmpty()){
             alert.setContentText("Settetrekken er påkrevd!");
             alert.showAndWait();
             bil_type.getStyleClass().add("custom");
+            validated=false;
             return;
         }
         if ((ratt_type.getSelectionModel().isEmpty())) {
             alert.setContentText("Ratten er påkrevd!");
             alert.showAndWait();
             bil_type.getStyleClass().add("custom");
+            validated=false;
             return;
         }
         if (spoiler.getSelectionModel().isEmpty()){
             alert.setContentText("spoilen er påkrevd!");
             alert.showAndWait();
             bil_type.getStyleClass().add("custom");
+            validated=false;
             return;
         }
         if ((farge.getSelectionModel().isEmpty())) {
             alert.setContentText("Farget er påkrevd!");
             alert.showAndWait();
             bil_type.getStyleClass().add("custom");
+            validated=false;
             return;
         }
+        else {validated=true;}
     }
 
     @Override
@@ -270,35 +312,38 @@ public class Controller implements Initializable {
         HidePrisLables();
         fillpriser();
 
+
+
     }
+
 
     public void fillpriser() {
         ArrayList<Bil_type> bil_types = new ArrayList<>();
-        bil_types = (ArrayList<Bil_type>) repo.load_Bil_Type_List();
+        bil_types = (ArrayList<Bil_type>) adminService.load_Bil_Type_List();
         loadBilTypeData(bil_types);
 
         ArrayList<Hestkrefter> hestkrefters = new ArrayList<>();
-        hestkrefters = (ArrayList<Hestkrefter>) repo.load_Hestkrefter_List();
+        hestkrefters = (ArrayList<Hestkrefter>) adminService.load_Hestkrefter_List();
         loadHestkrefterData(hestkrefters);
 
         ArrayList<Felg> felgs = new ArrayList<>();
-        felgs = (ArrayList<Felg>) repo.load_Felg_List();
+        felgs = (ArrayList<Felg>) adminService.load_Felg_List();
         loadFelgData(felgs);
 
         ArrayList<Settetrekk> settetrekks = new ArrayList<>();
-        settetrekks = (ArrayList<Settetrekk>) repo.load_Settetrekk_List();
+        settetrekks = (ArrayList<Settetrekk>) adminService.load_Settetrekk_List();
         loadSettetrekkData(settetrekks);
 
         ArrayList<Ratt_type> ratt_types = new ArrayList<>();
-        ratt_types = (ArrayList<Ratt_type>) repo.load_Ratt_type_List();
+        ratt_types = (ArrayList<Ratt_type>) adminService.load_Ratt_type_List();
         loadRattTypeData(ratt_types);
 
         ArrayList<Spoiler> spoilers = new ArrayList<>();
-        spoilers = (ArrayList<Spoiler>) repo.load_Spoiler_List();
+        spoilers = (ArrayList<Spoiler>) adminService.load_Spoiler_List();
         loadSpoilerData(spoilers);
 
         ArrayList<Farge> farges = new ArrayList<>();
-        farges = (ArrayList<Farge>) repo.load_Farge_List();
+        farges = (ArrayList<Farge>) adminService.load_Farge_List();
         loadFargeData(farges);
 
     }
@@ -395,7 +440,7 @@ public class Controller implements Initializable {
     //find bil type price
     public void getBilTypePris(){
         try {
-            bil_typePris =(repo.getBilTypePris(bil_type.getValue().toLowerCase().trim()));
+            bil_typePris =(adminService.getBilTypePris(bil_type.getValue().toLowerCase().trim()));
             //show the price in the form
             lblPrs_bil_type.setText(String.valueOf(bil_typePris));
             lblPrs_bil_type.setVisible(true);
@@ -409,7 +454,7 @@ public class Controller implements Initializable {
     //find farge price
     public void getFargePris(){
         try {
-            fargePris =(repo.getFargePris(farge.getValue().toLowerCase().trim()));
+            fargePris =(adminService.getFargePris(farge.getValue().toLowerCase().trim()));
             //show the price in the form
             lblPrs_farge.setText(String.valueOf(fargePris));
             lblPrs_farge.setVisible(true);
@@ -422,7 +467,7 @@ public class Controller implements Initializable {
     //find felg price
     public void getFelgPris(){
         try {
-            felgPris =(repo.getFelgPris(felg.getValue().toLowerCase().trim()));
+            felgPris =(adminService.getFelgPris(felg.getValue().toLowerCase().trim()));
             //show the price in the form
             lblPrs_felg.setText(String.valueOf(felgPris));
             lblPrs_felg.setVisible(true);
@@ -435,7 +480,7 @@ public class Controller implements Initializable {
     //find Hestekrefter price
     public void getHestekrefterPris(){
         try {
-            hestekreftPris =(repo.getHestkrefterPris(hestkrefter.getValue().toLowerCase().trim()));
+            hestekreftPris =(adminService.getHestkrefterPris(hestkrefter.getValue().toLowerCase().trim()));
             //show the price in the form
             lblPrs_hestkrefter.setText(String.valueOf(hestekreftPris));
             lblPrs_hestkrefter.setVisible(true);
@@ -449,7 +494,7 @@ public class Controller implements Initializable {
     //find ratt type price
     public void getRattTypePris(){
         try {
-            ratt_typePris =(repo.getRatt_typePris(ratt_type.getValue().toLowerCase().trim()));
+            ratt_typePris =(adminService.getRatt_typePris(ratt_type.getValue().toLowerCase().trim()));
             //show the price in the form
             lblPrs_ratt_type.setText(String.valueOf(ratt_typePris));
             lblPrs_ratt_type.setVisible(true);
@@ -462,7 +507,7 @@ public class Controller implements Initializable {
     //find settetrekk price
     public void getSettetrekkPris(){
         try {
-            settetrekkPris =(repo.getSettetrekkPris(settetrekk.getValue().toLowerCase().trim()));
+            settetrekkPris =(adminService.getSettetrekkPris(settetrekk.getValue().toLowerCase().trim()));
             //show the price in the form
             lblPrs_settetrekk.setText(String.valueOf(settetrekkPris));
             lblPrs_settetrekk.setVisible(true);
@@ -475,7 +520,7 @@ public class Controller implements Initializable {
     //find Spoiler price
     public void getSpoilerPris(){
         try {
-            spilerPris =(repo.getSpoilerPris(spoiler.getValue().toLowerCase().trim()));
+            spilerPris =(adminService.getSpoilerPris(spoiler.getValue().toLowerCase().trim()));
             //show the price in the form
             lblPrs_spoiler.setText(String.valueOf(spilerPris));
             lblPrs_spoiler.setVisible(true);
@@ -489,8 +534,8 @@ public class Controller implements Initializable {
     public void getIntegrateGPSPris(){
         if (integratedGPS.isSelected())
         {
-            repo.loadIntegratedGPS();
-            integrateGPSPris=repo.loadIntegratedGPS();
+            adminService.loadIntegratedGPS();
+            integrateGPSPris=adminService.loadIntegratedGPS();
             lblPrs_integratedGPS.setText(String.valueOf(integrateGPSPris));
             lblPrs_integratedGPS.setVisible(true);
             //add it to the components price
@@ -501,8 +546,8 @@ public class Controller implements Initializable {
     //find Soltak price
     public void getSoltakSPris(){
         if (soltak.isSelected()) {
-            repo.loadSoltak();
-            soltakPris = repo.loadSoltak();
+            adminService.loadSoltak();
+            soltakPris = adminService.loadSoltak();
             lblPrs_soltak.setText(String.valueOf(soltakPris));
             lblPrs_soltak.setVisible(true);
             //add it to the components price
@@ -513,8 +558,8 @@ public class Controller implements Initializable {
     //find Hengerfeste price
     public void getHengerfestePris(){
         if (hegefester.isSelected()) {
-            repo.loadHegefester();
-            hengefestPris = repo.loadHegefester();
+            adminService.loadHegefester();
+            hengefestPris = adminService.loadHegefester();
             lblPrs_hegefester.setText(String.valueOf(hengefestPris));
             lblPrs_hegefester.setVisible(true);
             //add it to the components price
@@ -565,6 +610,12 @@ public class Controller implements Initializable {
 
         //show save button after calculating
         btnSave.setVisible(true);
+
+    }
+
+    public void btnDelete(ActionEvent actionEvent) throws NoSuchElementException{
+
+
     }
 
 }
